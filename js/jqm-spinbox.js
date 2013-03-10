@@ -70,21 +70,22 @@
 			$.mobile.behaviors.addFirstLastClasses._addFirstLastClasses(w.d.wrap.find('.ui-btn'), w.d.wrap.find('.ui-btn'), true);
 			
 			var handleClick = function (target, calculator) {
+				var doIncrement = function () {
+					value = calculator();
+					w.increment(value);
+				}
 				if ( o.clickEvent != 'vmousedown' ) {
 					target.on(o.clickEvent, function (e) {
 						e.preventDefault();
-						value = calculator();
-						w.increment(value);
+						doIncrement();
 					});
 				} else {
 					target.on({
 							vmousedown : function (e) {
 								e.preventDefault();
+								doIncrement();	// Instantly increment click once
 								interval = window.setInterval(
-									function () {
-										value = calculator();
-		    						w.increment(value)
-		  						}, 
+									function () { doIncrement(); }, 
 		  						o.delay);
 							},
 							mouseup : function () {
