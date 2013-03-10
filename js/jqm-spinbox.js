@@ -15,6 +15,7 @@
 			initSelector: "input[data-role='spinbox']",
 			clickEvent: 'vclick',
 			type: 'horizontal', // or vertical
+			delay: 200
 		},
 		_create: function() {
 			var w = this, tmp,
@@ -68,11 +69,51 @@
 				
 			$.mobile.behaviors.addFirstLastClasses._addFirstLastClasses(w.d.wrap.find('.ui-btn'), w.d.wrap.find('.ui-btn'), true);
 			
-			w.d.up.on(o.clickEvent, function(e) {
-				e.preventDefault();
-				value = parseInt(w.d.input.val(),10) + 1;
-				w.increment(value);
-			});
+			if ( o.clickEvent != 'vmousedown' ) {
+				w.d.up.on(o.clickEvent, function(e) {
+					e.preventDefault();
+					value = parseInt(w.d.input.val(),10) + 1;
+					w.increment(value);
+				});
+			} else {
+				w.d.up.on({
+						vmousedown : function (e) {
+							e.preventDefault();
+							interval = window.setInterval(
+								function() {
+									value = parseInt(w.d.input.val(),10) + 1;
+      						w.increment(value)
+    						}, 
+    						o.delay);
+						},
+						mouseup : function () {
+    					window.clearInterval(interval);
+  					} 
+				});
+			}
+			
+			if ( o.clickEvent != 'vmousedown' ) {
+				w.d.down.on(o.clickEvent, function(e) {
+					e.preventDefault();
+					value = parseInt(w.d.input.val(),10) - 1;
+					w.increment(value);
+				});
+			} else {
+				w.d.down.on({
+						vmousedown : function (e) {
+							e.preventDefault();
+							interval = window.setInterval(
+								function() {
+									value = parseInt(w.d.input.val(),10) - 1;
+      						w.increment(value)
+    						}, 
+    						o.delay);
+						},
+						mouseup : function () {
+    					window.clearInterval(interval);
+  					} 
+				});
+			}
 			
 			w.d.down.on(o.clickEvent, function(e) {
 				e.preventDefault();
