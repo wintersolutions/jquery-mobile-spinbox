@@ -70,36 +70,21 @@
 			
 			w.d.up.on(o.clickEvent, function(e) {
 				e.preventDefault();
-				if ( !w.disabled ) {
-					tmp = parseInt(w.d.input.val(),10) + 1;
-					if ( tmp <= o.dmax ) { 
-						w.d.input.val(tmp);
-						w.d.input.trigger('change');
-					}
-				}
+				value = parseInt(w.d.input.val(),10) + 1;
+				w.increment(value);
 			});
 			
 			w.d.down.on(o.clickEvent, function(e) {
 				e.preventDefault();
-				if ( !w.disabled ) {
-					tmp = parseInt(w.d.input.val(),10) - 1;
-					if ( tmp >= o.dmin ) { 
-						w.d.input.val(tmp);
-						w.d.input.trigger('change');
-					}
-				}
+				value = parseInt(w.d.input.val(),10) - 1;
+				w.increment(value);
 			});
 			
 			if ( typeof $.event.special.mousewheel !== 'undefined' ) { // Mousewheel operation, if plugin is loaded
 				w.d.input.on('mousewheel', function(e,d) {
 					e.preventDefault();
-					if ( !w.disabled ) {
-						tmp = parseInt(w.d.input.val(),10) + ((d<0)?-1:1);
-						if ( tmp >= o.dmin && tmp <= o.dmax ) { 
-							w.d.input.val(tmp); 
-							w.d.input.trigger('change');
-						}
-					}
+					value = parseInt(w.d.input.val(),10) + ((d<0)?-1:1);
+					w.increment(value);
 				});
 			}
 		},
@@ -114,6 +99,14 @@
 			this.d.input.attr("disabled", false);
 			this.d.input.removeClass("ui-disabled");
 			this.disabled = false;
+		},
+		increment: function(value){
+			if ( !this.disabled ) {
+				if ( value >= this.options.dmin && value <= this.options.dmax ) {
+					this.d.input.val(value);
+					this.d.input.trigger('change');
+				}
+			}
 		}
 	});
 	  
