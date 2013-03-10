@@ -115,12 +115,6 @@
 				});
 			}
 			
-			w.d.down.on(o.clickEvent, function(e) {
-				e.preventDefault();
-				value = parseInt(w.d.input.val(),10) - 1;
-				w.increment(value);
-			});
-			
 			if ( typeof $.event.special.mousewheel !== 'undefined' ) { // Mousewheel operation, if plugin is loaded
 				w.d.input.on('mousewheel', function(e,d) {
 					e.preventDefault();
