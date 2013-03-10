@@ -15,7 +15,7 @@
 			initSelector: "input[data-role='spinbox']",
 			clickEvent: 'vclick',
 			type: 'horizontal', // or vertical
-			delay: 200
+			delay: 200 // every 0,2 s
 		},
 		_create: function() {
 			var w = this, tmp,
@@ -69,51 +69,33 @@
 				
 			$.mobile.behaviors.addFirstLastClasses._addFirstLastClasses(w.d.wrap.find('.ui-btn'), w.d.wrap.find('.ui-btn'), true);
 			
-			if ( o.clickEvent != 'vmousedown' ) {
-				w.d.up.on(o.clickEvent, function(e) {
-					e.preventDefault();
-					value = parseInt(w.d.input.val(),10) + 1;
-					w.increment(value);
-				});
-			} else {
-				w.d.up.on({
-						vmousedown : function (e) {
-							e.preventDefault();
-							interval = window.setInterval(
-								function() {
-									value = parseInt(w.d.input.val(),10) + 1;
-      						w.increment(value)
-    						}, 
-    						o.delay);
-						},
-						mouseup : function () {
-    					window.clearInterval(interval);
-  					} 
-				});
-			}
+			var handleClick = function (target, calculator) {
+				if ( o.clickEvent != 'vmousedown' ) {
+					target.on(o.clickEvent, function (e) {
+						e.preventDefault();
+						value = calculator();
+						w.increment(value);
+					});
+				} else {
+					target.on({
+							vmousedown : function (e) {
+								e.preventDefault();
+								interval = window.setInterval(
+									function () {
+										value = calculator();
+		    						w.increment(value)
+		  						}, 
+		  						o.delay);
+							},
+							mouseup : function () {
+		  					window.clearInterval(interval);
+							} 
+					});
+				}
+			};
 			
-			if ( o.clickEvent != 'vmousedown' ) {
-				w.d.down.on(o.clickEvent, function(e) {
-					e.preventDefault();
-					value = parseInt(w.d.input.val(),10) - 1;
-					w.increment(value);
-				});
-			} else {
-				w.d.down.on({
-						vmousedown : function (e) {
-							e.preventDefault();
-							interval = window.setInterval(
-								function() {
-									value = parseInt(w.d.input.val(),10) - 1;
-      						w.increment(value)
-    						}, 
-    						o.delay);
-						},
-						mouseup : function () {
-    					window.clearInterval(interval);
-  					} 
-				});
-			}
+			handleClick(w.d.up, function() {return parseInt(w.d.input.val(),10) + 1 });
+			handleClick(w.d.down, function() {return parseInt(w.d.input.val(),10) - 1 });
 			
 			if ( typeof $.event.special.mousewheel !== 'undefined' ) { // Mousewheel operation, if plugin is loaded
 				w.d.input.on('mousewheel', function(e,d) {
