@@ -88,7 +88,7 @@
 									function () { doIncrement(); }, 
 		  						o.delay);
 							},
-							mouseup : function () {
+							vmouseup : function () {
 		  					window.clearInterval(interval);
 							} 
 					});
