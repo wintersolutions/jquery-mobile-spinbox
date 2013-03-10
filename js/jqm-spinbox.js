@@ -87,6 +87,12 @@
 								interval = window.setInterval(
 									function () { doIncrement(); }, 
 		  						o.delay);
+		  						
+		  					// Don't increment after page change
+		  					$(document).delegate('.ui-page', 'pagehide', function () {
+		  							window.clearInterval(interval);
+		  						}
+		  					)
 							},
 							vmouseup : function () {
 		  					window.clearInterval(interval);
